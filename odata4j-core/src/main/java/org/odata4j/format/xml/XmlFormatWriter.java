@@ -70,7 +70,12 @@ public class XmlFormatWriter {
         String typename = type.getFullyQualifiedTypeName();
         if (value instanceof OCollection) {
           EdmCollectionType collectionType = (EdmCollectionType) type;
-          typename = "Collection(" + collectionType.getItemType().getFullyQualifiedTypeName() + ")";
+          if (collectionType.getCollectionKind().equals(CollectionKind.Collection))
+            typename = "Collection(" + collectionType.getItemType().getFullyQualifiedTypeName() + ")";
+          else if (collectionType.getCollectionKind().equals(CollectionKind.Bag))
+        	  typename = "Bag(" + collectionType.getItemType().getFullyQualifiedTypeName() + ")";
+          else if (collectionType.getCollectionKind().equals(CollectionKind.List))
+        	  typename = "List(" + collectionType.getItemType().getFullyQualifiedTypeName() + ")";
         }
         writer.writeAttribute(new QName2(m, "type", "m"), typename);
       }
